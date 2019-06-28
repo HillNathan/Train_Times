@@ -1,0 +1,39 @@
+body {
+    background-image: url(../images/kristina-kashtanova-EwpUsHDmEwg-unsplash.jpg);
+
+}
+
+.container {
+    margin-bottom: 55px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: black;
+    color: white;
+    border: 10px solid brown;
+    font-family: 'Vollkorn', serif;
+}
+
+.trains {
+    border: 10px solid brown;
+    background-color: black;
+    color:white;
+    font-family: 'Vollkorn', serif;
+}
+
+.form-control {
+    background-color: #b49292;
+    font-weight: 700;
+}
+
+.footer {
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background-color: black;
+    border-top: 10px solid brown;
+    color:  #b49292;
+    text-align: center;
+}

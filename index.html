@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Platform 9 7/16</title>
+
+    <link   rel="stylesheet" 
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+            crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Vollkorn&display=swap" rel="stylesheet">
+    <link   rel="stylesheet"
+            href="assets/css/style.css">
+
+    <script src="http://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    <script src="assets/javascript/app.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!-- Header for the page -->
+    <div class="row"><div class="col"><div class="jumbotron header p-4 mb-4">
+        <h1 class="display-3">Platform 9 <sup>7/16</sup></h1>
+    </div></div></div>
+
+    <!-- Form to take in the data to be kept in the database and shown on the table below -->
+    <div class="row mb-4"><div class="col">
+            <form class="p-3 rounded-sm trains">
+                    <div class="row m-1">
+                        <div class="col">
+                            <label for="name-input">Train Name</label>
+                            <input class="form-control" type="text" id="name-input">
+                        </div>
+                        <div class="col">                        
+                            <label for="role-input">Train Destination</label>
+                            <input class="form-control" type="text" id="destination-input">
+                        </div>
+                    </div>
+                    <div class="row m-1">
+                        <div class="col">
+                            <label for="start-date-input">First Train Time</label>
+                            <input class="form-control" type="text" id="first-time-input">
+                        </div>
+                        <div class="col">
+                            <label for="rate-input">Frequency (in minutes)</label>
+                            <input class="form-control" type="text" id="frequency-input">
+                        </div>
+                    </div>
+                    <div class="row m-1">
+                        <div class="col">
+                                <button id="add-user" type="button" class="btn btn-secondary mt-2">Submit</button>
+                        </div>
+                    </div>
+                </form>
+    </div></div>
+
+    <!-- table to show the output data -->
+    <div class="row">
+            <div class="col">
+                <table class="table trains">
+                    <thead>
+                        <th scope=col">Train Name</th>
+                        <th scope=col">Destination</th>
+                        <th scope=col">First Train Time</th>
+                        <th scope=col">Frequency (min)</th>
+                        <th scope=col">Next Train Time</th>
+                        <th scope=col">Minutes to Arrival</th>
+                    </thead>
+                    <tbody id="employee-table">
+                        <tr>
+                            <td>Hogwarts Local</td>
+                            <td>Little Whinging</td>
+                            <td>12:00</td>
+                            <td>120</td>
+                            <td>14:00</td>
+                            <td>120</td>
+                        </tr>
+                    </tbody>
+    
+                </table>
+            </div>
+        </div>
+
+
+</div>
+
+<div class="footer">
+        Copyright &copy 2019 Nathan Hill
+</div>
+    
+</body>
+</html>
