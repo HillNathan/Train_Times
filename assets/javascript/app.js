@@ -62,9 +62,6 @@ $("#clear-alert").on('click', function() {
     $(".my-alert").hide();
 });
 
-///// testing the refresh function 
-refreshList();
-
 
 
 });
@@ -254,11 +251,3 @@ function showAlert(alertText) {
     $(".my-alert").show();
 }
 
-function refreshList() {
-    
-    database.ref().once('value').then(function(shapshot) {
-        console.log(snapshot.val());
-    })
-
-
-}
