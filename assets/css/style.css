@@ -37,3 +37,20 @@ body {
     color:  #b49292;
     text-align: center;
 }
+
+.my-alert {
+    background-color:  #b49292;
+    color: black;
+    position:fixed;
+    top: 35%;
+    left: 35%;
+    height: 100px;
+    width: 350px;
+    border: 10px solid brown;
+    text-align: center;
+    display:none;
+}
+
+#clear-alert {
+    margin: auto;
+}
