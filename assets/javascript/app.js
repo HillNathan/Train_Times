@@ -16,21 +16,11 @@ $( document ).ready(function() {
 $("#add-train").on("click", function(event) {
     event.preventDefault();
     var goodInfo = true;
-    // var startTime = moment().format("HH:mm");
-    // console.log(startTime)
-
     var name = $("#name-input").val().trim();
     var destination = $("#destination-input").val().trim();
     var startTime = $("#first-time-input").val().trim();
     var frequency = parseInt($("#frequency-input").val().trim());
 
-    // console.log("startTime");
-    // console.log(startTime)
-    // console.log("-------------------------");
-    // console.log("newTime");
-    // console.log(newTime)
-    
-    // console.log(moment().invalidAt(newTime));
     if (!isValidTime(startTime)) {
         goodInfo = false;
         showAlert("Please enter a valid time");
@@ -41,7 +31,7 @@ $("#add-train").on("click", function(event) {
         goodInfo = false;
         showAlert("Please enter a number for the frequency");
     }
-
+    console.log(goodInfo);
     if (goodInfo) {
         database.ref().push({
             name,
@@ -64,13 +54,15 @@ $("#clear-alert").on('click', function() {
 
 
 
+
+
 });
 
 database.ref().on("child_added", function(snapshot) {
     var newRow = $("<tr>");
     var tempCell = $("<td>");
     var freq = parseInt(snapshot.val().frequency);
-    var currentTime = moment().format("HH:mm");
+    var currentTime = makeInt(moment().format("HH:mm"));
 
     // build and append the Train Name cell
     tempCell.text(snapshot.val().name);
@@ -88,7 +80,7 @@ database.ref().on("child_added", function(snapshot) {
     tempCell = $("<td>");   // cell must be reset for the next cell to be built
 
     // build and append the frequency cell
-    tempCell.text(snapshot.val().frequency);
+    tempCell.text(freq);
     newRow.append(tempCell);
     tempCell = $("<td>");   // cell must be reset for the next cell to be built
 
@@ -104,23 +96,24 @@ database.ref().on("child_added", function(snapshot) {
             // console.log(timeToArrival);
             // console.log(intervalTime);
 
-    var tempTime = snapshot.val().startTime;
-    // console.log("start tempTime: " + tempTime);
-    // console.log("--------------------------");
-    while (myIsBefore(tempTime,currentTime)) {
-        // console.log("Temp time: " + tempTime);
-        // console.log("current time: " + currentTime);
-        tempTime = addMinutes(tempTime,freq);
+    var tempTime = makeInt(snapshot.val().startTime);
+    while (tempTime < currentTime) {
+        tempTime = tempTime + freq;
     }
-    // console.log(tempTime);
+    console.log("startTime as an integer: " + tempTime);
+    console.log("currentTime as an integer: " + currentTime);
+
+    console.log("startTime as time " + parseTime(tempTime));
+    console.log("currentTime as time " + parseTime(tempTime));
+
 
 
     // build and append the next arrival cell
-    tempCell.text(tempTime);
+    tempCell.text(parseTime(tempTime));
     newRow.append(tempCell);
     tempCell = $("<td>");   // cell must be reset for the next cell to be built
 
-    var temp = findDiff(currentTime,tempTime);
+    var temp = tempTime - currentTime;
 
     tempCell.text(temp);
     newRow.append(tempCell);
@@ -133,12 +126,13 @@ database.ref().on("child_added", function(snapshot) {
 function addMinutes (startTime, freq) {
     // startTime should be a string of length 5 with format HH:mm 
     // freq should be an integer
-    var totalMin = makeInt(startTime);
-    totalMin += freq;
+    var totalMin = startTime + freq;
+    // totalMin += freq;
     // console.log("Total Minutes");
     // console.log(totalMin);
-    var returnString = parseTime(totalMin)
-    return returnString;
+    // var returnString = parseTime(totalMin)
+    console.log("returning integer" + totalMin);
+    return totalMin;
 }
 
 function parseTime(int) {
@@ -162,24 +156,29 @@ function parseTime(int) {
         var minStr = min;
     }   
     var returnString = hrsTxt + ":" + minStr;
-    // console.log("return from ParseTime: " + returnString);
+    console.log(returnString);
     return returnString; 
 }
 
 function makeInt(timeString) {
-    // console.log("timeString in makeint: " + timeString);
-    var hrs = parseInt(timeString.substring(0,2));
-    var min = parseInt(timeString.substring(3));
-    // console.log(hrs);
-    // console.log(min);
+    var hrs;
+    var min;
+    if (timeString.length === 4) {
+        hrs = parseInt(timeString.substr(0,1))
+        min = parseInt(timeString.substr(2,2))
+    } else {
+        hrs = parseInt(timeString.substr(0,2));
+        min = parseInt(timeString.substr(3,2));
+    }
     return ((hrs * 60) + min);
 }
 
 function myIsBefore(time1, time2) {
-    // console.log("--- CALL OF ISBEFORE ---")
+    console.log("--- CALL OF ISBEFORE ---")
     var time1int = makeInt(time1);
     var time2int = makeInt(time2);
-    // asks if time1 is before time2, both arguments are passed as strings
+    alert("time1 is : " + time1int);
+    alert("time2 is : " + time2int);
     if (time1int < time2int) {
         return true;
     }
