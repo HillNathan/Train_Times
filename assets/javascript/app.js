@@ -44,6 +44,10 @@ $("#add-train").on("click", function(event) {
     }
 });
 
+$(document).on('click', '.remove-train', function() {
+    var keyToRemove = $(this).attr('data-key');
+    database.ref(keyToRemove).remove();
+})
 
 $("#clear-alert").on('click', function() {
     event.preventDefault();
@@ -58,8 +62,76 @@ var refreshTimer = setInterval(dataSnapshot, 1000 );
 //// end of document onload function for DOM manipulation
 
 database.ref().on("child_added", function(snapshot) {
-    $("#train-table").empty();
-    buildRow(snapshot);
+    var newRow = $("<tr>");
+    var tempCell = $("<td>");
+    var freq = parseInt(snapshot.val().frequency);
+    var currentTime = makeInt(moment().format("HH:mm"));
+
+    // console.log(snapshot.key)
+
+    // build and append the Train Name cell
+    tempCell.text(snapshot.val().name);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    // build and append the Train destination cell
+    tempCell.text(snapshot.val().destination);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    //build and append the start time cell
+    tempCell.text(snapshot.val().startTime);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    // build and append the frequency cell
+    tempCell.text(freq);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+         
+    var tempTime = makeInt(snapshot.val().startTime);
+    var timeToArrival = 0;
+
+    if (tempTime < currentTime) {
+        // for start time before current time
+        while (tempTime < currentTime) {
+            tempTime = tempTime + freq;
+        }
+        timeToArrival =  tempTime - currentTime
+    }
+    // for start time after current time
+    else {
+        timeToArrival =  tempTime - currentTime
+        while (timeToArrival > freq){
+            tempTime -= freq;
+            timeToArrival =  tempTime - currentTime
+        }
+    }
+
+    // build and append the next arrival cell
+    tempCell.text(parseTime(tempTime));
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    if (timeToArrival === 0) {
+        tempCell.html("<span class='now'>Arriving Now</span>");
+    }
+    else {tempCell.text(timeToArrival);}
+    
+    newRow.append(tempCell);
+    tempCell = $("<td>");
+
+
+    var newButton = $("<button>");
+    newButton.attr('data-key', snapshot.key);
+    newButton.addClass('btn btn-secondary p-1 remove-train');
+    newButton.text('Remove').$
+
+    tempCell.append(newButton);
+    newRow.append(tempCell);
+
+    // append the data into our table
+    $("#train-table").append(newRow);
 });
 
 function parseTime(int) {
@@ -140,6 +212,8 @@ function isValidTime(testString){
 function showAlert(alertText) {
     var alertTop = Math.floor((($(window).height())/2)-50);
     var alertLeft = Math.floor((($(window).width())/2) - 175);
+    alert("alertTop: " + alertTop);
+    alert("alertLeft: " + alertLeft);
     $(".alert-text").text(alertText);
     $(".my-alert").css('top', alertTop);
     $(".my-alert").css('left', alertLeft);
@@ -161,6 +235,8 @@ function buildRow(snapshot) {
     var tempCell = $("<td>");
     var freq = parseInt(snapshot.val().frequency);
     var currentTime = makeInt(moment().format("HH:mm"));
+
+    // console.log(snapshot.key)
 
     // build and append the Train Name cell
     tempCell.text(snapshot.val().name);
@@ -211,6 +287,16 @@ function buildRow(snapshot) {
     }
     else {tempCell.text(timeToArrival);}
     
+    newRow.append(tempCell);
+    tempCell = $("<td>");
+
+
+    var newButton = $("<button>");
+    newButton.attr('data-key', snapshot.key);
+    newButton.addClass('btn btn-secondary p-1 remove-train');
+    newButton.text('Remove').$
+
+    tempCell.append(newButton);
     newRow.append(tempCell);
 
     // append the data into our table
