@@ -25,13 +25,11 @@ $("#add-train").on("click", function(event) {
         goodInfo = false;
         showAlert("Please enter a valid time");
     }
-    console.log(frequency);
-    if (!frequency) {
+    else if (!frequency) {
         console.log("bad frequency")
         goodInfo = false;
         showAlert("Please enter a number for the frequency");
     }
-    console.log(goodInfo);
     if (goodInfo) {
         database.ref().push({
             name,
@@ -52,7 +50,7 @@ $("#clear-alert").on('click', function() {
     $(".my-alert").hide();
 });
 
-var refreshTimer = setInterval(dataSnapshot, 10000 );
+var refreshTimer = setInterval(dataSnapshot, 1000 );
 
 
 
@@ -140,8 +138,11 @@ function isValidTime(testString){
 }
 
 function showAlert(alertText) {
-    console.log("showAlert is called");
+    var alertTop = Math.floor((($(window).height())/2)-50);
+    var alertLeft = Math.floor((($(window).width())/2) - 175);
     $(".alert-text").text(alertText);
+    $(".my-alert").css('top', alertTop);
+    $(".my-alert").css('left', alertLeft);
     $(".my-alert").show();
 }
 
