@@ -52,88 +52,17 @@ $("#clear-alert").on('click', function() {
     $(".my-alert").hide();
 });
 
+var refreshTimer = setInterval(dataSnapshot, 10000 );
 
 
 
-
-});
+}); 
+//// end of document onload function for DOM manipulation
 
 database.ref().on("child_added", function(snapshot) {
-    var newRow = $("<tr>");
-    var tempCell = $("<td>");
-    var freq = parseInt(snapshot.val().frequency);
-    var currentTime = makeInt(moment().format("HH:mm"));
-
-    // build and append the Train Name cell
-    tempCell.text(snapshot.val().name);
-    newRow.append(tempCell);
-    tempCell = $("<td>");   // cell must be reset for the next cell to be built
-
-    // build and append the Train destination cell
-    tempCell.text(snapshot.val().destination);
-    newRow.append(tempCell);
-    tempCell = $("<td>");   // cell must be reset for the next cell to be built
-
-    //build and append the start time cell
-    tempCell.text(snapshot.val().startTime);
-    newRow.append(tempCell);
-    tempCell = $("<td>");   // cell must be reset for the next cell to be built
-
-    // build and append the frequency cell
-    tempCell.text(freq);
-    newRow.append(tempCell);
-    tempCell = $("<td>");   // cell must be reset for the next cell to be built
-
-    // NONE OF THIS CODE WORKS
-            // var temp2 = addMinutes(snapshot.val().startTime, snapshot.val().frequency) ;
-            // console.log(temp2);
-            // while (moment(intervalTime).isBefore(momentNow)) {
-            //     intervalTime.add(freq, 'minutes');
-            // };
-
-            // var timeToArrival = moment(intervalTime).diff(momentNow, 'minutes');
-
-            // console.log(timeToArrival);
-            // console.log(intervalTime);
-
-    var tempTime = makeInt(snapshot.val().startTime);
-    while (tempTime < currentTime) {
-        tempTime = tempTime + freq;
-    }
-    console.log("startTime as an integer: " + tempTime);
-    console.log("currentTime as an integer: " + currentTime);
-
-    console.log("startTime as time " + parseTime(tempTime));
-    console.log("currentTime as time " + parseTime(tempTime));
-
-
-
-    // build and append the next arrival cell
-    tempCell.text(parseTime(tempTime));
-    newRow.append(tempCell);
-    tempCell = $("<td>");   // cell must be reset for the next cell to be built
-
-    var temp = tempTime - currentTime;
-
-    tempCell.text(temp);
-    newRow.append(tempCell);
-
-    // append the data into our table
-    $("#train-table").append(newRow);
-
+    $("#train-table").empty();
+    buildRow(snapshot);
 });
-
-function addMinutes (startTime, freq) {
-    // startTime should be a string of length 5 with format HH:mm 
-    // freq should be an integer
-    var totalMin = startTime + freq;
-    // totalMin += freq;
-    // console.log("Total Minutes");
-    // console.log(totalMin);
-    // var returnString = parseTime(totalMin)
-    console.log("returning integer" + totalMin);
-    return totalMin;
-}
 
 function parseTime(int) {
     var hrs = Math.floor(int / 60);
@@ -156,7 +85,6 @@ function parseTime(int) {
         var minStr = min;
     }   
     var returnString = hrsTxt + ":" + minStr;
-    console.log(returnString);
     return returnString; 
 }
 
@@ -171,39 +99,6 @@ function makeInt(timeString) {
         min = parseInt(timeString.substr(3,2));
     }
     return ((hrs * 60) + min);
-}
-
-function myIsBefore(time1, time2) {
-    console.log("--- CALL OF ISBEFORE ---")
-    var time1int = makeInt(time1);
-    var time2int = makeInt(time2);
-    alert("time1 is : " + time1int);
-    alert("time2 is : " + time2int);
-    if (time1int < time2int) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function findDiff(time1, time2) {
-    // function finds the difference between the times, regardless of whether the higher value is passed 
-    //    in the first or second argument. 
-    var timeInt1 = makeInt(time1);
-    var timeInt2 = makeInt(time2);
-
-    var diff;
-    if (timeInt1 < timeInt2) {
-        diff = timeInt2 - timeInt1;
-    }
-    else if (timeInt2 > timeInt1) {
-        diff = timeInt1 - timeInt2;
-    }
-    else {
-        diff = 0;
-    }
-    return diff;
 }
 
 function isValidTime(testString){
@@ -250,3 +145,73 @@ function showAlert(alertText) {
     $(".my-alert").show();
 }
 
+function dataSnapshot() {
+    database.ref().once('value').then(function(snapshot) {
+        $("#train-table").empty();
+        snapshot.forEach(function(childSnap) {
+            buildRow(childSnap)
+        })
+    })
+
+}
+
+function buildRow(snapshot) {
+    var newRow = $("<tr>");
+    var tempCell = $("<td>");
+    var freq = parseInt(snapshot.val().frequency);
+    var currentTime = makeInt(moment().format("HH:mm"));
+
+    // build and append the Train Name cell
+    tempCell.text(snapshot.val().name);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    // build and append the Train destination cell
+    tempCell.text(snapshot.val().destination);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    //build and append the start time cell
+    tempCell.text(snapshot.val().startTime);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    // build and append the frequency cell
+    tempCell.text(freq);
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+         
+    var tempTime = makeInt(snapshot.val().startTime);
+    var timeToArrival = 0;
+
+    if (tempTime < currentTime) {
+        // for start time before current time
+        while (tempTime < currentTime) {
+            tempTime = tempTime + freq;
+        }
+        timeToArrival =  tempTime - currentTime
+    }
+    // for start time after current time
+    else {
+        timeToArrival =  tempTime - currentTime
+        while (timeToArrival > freq){
+            tempTime -= freq;
+            timeToArrival =  tempTime - currentTime
+        }
+    }
+
+    // build and append the next arrival cell
+    tempCell.text(parseTime(tempTime));
+    newRow.append(tempCell);
+    tempCell = $("<td>");   // cell must be reset for the next cell to be built
+
+    if (timeToArrival === 0) {
+        tempCell.html("<span class='now'>Arriving Now</span>");
+    }
+    else {tempCell.text(timeToArrival);}
+    
+    newRow.append(tempCell);
+
+    // append the data into our table
+    $("#train-table").append(newRow);
+}

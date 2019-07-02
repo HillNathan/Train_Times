@@ -54,3 +54,8 @@ body {
 #clear-alert {
     margin: auto;
 }
+
+.now {
+    color:red;
+    font-weight: 900;
+}
