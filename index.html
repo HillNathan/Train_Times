@@ -66,6 +66,7 @@
             <div class="col">
                 <table class="table trains">
                     <thead>
+                        <!-- Table header to start off the train list -->
                         <th scope=col">Train Name</th>
                         <th scope=col">Destination</th>
                         <th scope=col">First Train Time</th>
@@ -75,25 +76,19 @@
                         <th scope=col"></th>
                     </thead>
                     <tbody id="train-table">
-                        <!-- <tr>
-                            <td>Hogwarts Local</td>
-                            <td>Little Whinging</td>
-                            <td>12:00</td>
-                            <td>120</td>
-                            <td>14:00</td>
-                            <td>120</td>
-                        </tr> -->
+                        <!-- The list of trains will go here from the javascript -->
                     </tbody>
-    
                 </table>
             </div>
         </div>
 </div>
 
+<!-- This is my footer -->
 <div class="footer">
         Copyright &copy 2019 Nathan Hill
 </div>
 
+<!-- This is a special div that starts hidden and is moved and shown with jquery to display alerts -->
 <div class="my-alert">
     <div class="alert-text">Alert Text to go here.</div>
     <button id="clear-alert" class="btn btn-secondary mt-2">OK</button>

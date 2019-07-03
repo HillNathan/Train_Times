@@ -1,13 +1,15 @@
 body {
     background-image: url(../images/kristina-kashtanova-EwpUsHDmEwg-unsplash.jpg);
-
+    /* Set the background image */
 }
 
 .container {
     margin-bottom: 55px;
+    /* Set a bottom margin to allow the sticky footer */
 }
 
 .jumbotron {
+    /* Special styling for the jumbotron */
     text-align: center;
     background-color: black;
     color: white;
@@ -16,6 +18,7 @@ body {
 }
 
 .trains {
+    /* Special styling for the train list and form */
     border: 10px solid brown;
     background-color: black;
     color:white;
@@ -23,11 +26,13 @@ body {
 }
 
 .form-control {
+    /* Styling for form input controls */
     background-color: #b49292;
     font-weight: 700;
 }
 
 .footer {
+    /* Full styling for sticky footer */
     height: 50px;
     width: 100%;
     position: fixed;
@@ -39,6 +44,7 @@ body {
 }
 
 .my-alert {
+    /* Specil styling for the alert box */
     background-color:  #b49292;
     color: black;
     position:fixed;
@@ -56,6 +62,7 @@ body {
 }
 
 .now {
+    /* Special style for the "Arriving now" span  */
     color:red;
     font-weight: 900;
 }
